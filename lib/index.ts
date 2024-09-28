@@ -232,7 +232,7 @@ export function linkTag([title, subtitle, link]: str3) {
   return htmlTag('a', {
     class: 'tag-link',
     href: link, target: isLocal ? '_self' : '_blank'
-  }, bottom, false);
+  }, bottom, false).replace(/>(\s+)</g, '><');
 }
 
 /**
@@ -415,7 +415,7 @@ export function githubTag([repo]: str) {
     });
   </script>
   `
-  , false);
+  , false).replace(/>(\s+)</g, '><');
 }
 
 /**
@@ -451,7 +451,7 @@ export function gitlabTag([repo]: str) {
     });
   </script>
   `
-  , false);
+  , false).replace(/>(\s+)</g, '><');
 }
 
 /**
@@ -487,7 +487,7 @@ export function giteeTag([repo]: str) {
     });
   </script>
   `
-  , false);
+  , false).replace(/>(\s+)</g, '><');
 }
 
 /**
@@ -523,7 +523,7 @@ export function giteaTag([server, repo]: str2) {
     });
   </script>
   `
-  , false);
+  , false).replace(/>(\s+)</g, '><');
 }
 
 /**
