@@ -378,8 +378,10 @@ export function buttonTag([icon, content, url]: str3 | str2) {
     content = null;
   }
 
-  const onclickAction = url.startsWith('/')
+  const onclickAction = url.startsWith("/")
     ? `pjax.loadUrl('${url}')`
+    : url.startsWith("onclick:")
+    ? url.substring(8)
     : `window.open('${url}')`;
 
   const contentHtml = content ? htmlTag('span', {}, content, false) : '';
