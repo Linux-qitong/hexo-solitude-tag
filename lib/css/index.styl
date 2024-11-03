@@ -1,44 +1,17 @@
-// if $tag_span
-  @import "span.styl"
-
-// if $tag_fold
-  @import "fold.styl"
-
-// if $tag_media
-  @import "media.styl"
-
-// if $tag_link
-  @import "link.styl"
-
-// if $tag_label
-  @import "label.styl"
-
-// if $tag_inline_img
-  @import "inline-img.styl"
-
-// if $tag_checkbox
-  @import "checkbox.styl"
-
-// if $tag_note
-  @import "note.styl"
-
-// if $tag_timeline
-  @import "timeline.styl"
-
-// if $tag_button
-  @import "button.styl"
-
-// if $tag_repo
-  @import "repo.styl"
-
-// if $tag_bubble
-  @import "bubble.styl"
-
-// if $tag_keyboard
-  @import "keyboard.styl"
-
-// if $tag_spoiler
-  @import "spoiler.styl";
+@import 'span.styl'
+@import 'fold.styl'
+@import 'media.styl'
+@import 'link.styl'
+@import 'label.styl'
+@import 'inline-img.styl'
+@import 'checkbox.styl'
+@import 'note.styl'
+@import 'timeline.styl'
+@import 'button.styl'
+@import 'repo.styl'
+@import 'bubble.styl'
+@import 'keyboard.styl'
+@import 'spoiler.styl'
 
 .red
   color var(--efu-red)
@@ -112,6 +85,6 @@
     width 80%
     height 400px
 
-    @media screen and (max-width: 768px)
+    @media screen and (max-width 768px)
       width 100%
       height 200px

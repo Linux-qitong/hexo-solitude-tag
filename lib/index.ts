@@ -52,38 +52,9 @@ hexo.extend.tag.register('keyboard', keyboardTag);
 // @ts-ignore
 hexo.extend.tag.register('spoiler', spoilerTag);
 
-
-let _span = false;
-let _fold = false;
-let _link = false;
-let _label = false;
-let _inline_img = false;
-let _check = false;
-let _note = false;
-let _timeline = false;
-let _media = false;
-let _button = false;
-let _repo = false;
-let _bubble = false;
-let _keyboard = false;
-let _spoiler = false;
 // @ts-ignore
 hexo.extend.filter.register('stylus:renderer', (style: any) => {
   style
-    .define('$tag_span', _span)
-    .define('$tag_fold', _fold)
-    .define('$tag_link', _link)
-    .define('$tag_label', _label)
-    .define('$tag_inline_img', _inline_img)
-    .define('$tag_checkbox', _check)
-    .define('$tag_note', _note)
-    .define('$tag_timeline', _timeline)
-    .define('$tag_media', _media)
-    .define('$tag_button', _button)
-    .define('$tag_repo', _repo)
-    .define('$tag_bubble', _bubble)
-    .define('$tag_keyboard', _keyboard)
-    .define('$tag_spoiler', _spoiler)
     .import(path.join(__dirname, 'css', 'index.styl'));
 });
 
@@ -143,7 +114,6 @@ export function youtubeTag([id, type = 'video', cookie = true]: str | str2 | str
  *  {% span class content %}
  */
 export function spanTag([cls, text]: str2) {
-  _span = true;
   return htmlTag('span', {class: cls}, text, false);
 }
 
@@ -154,7 +124,6 @@ export function spanTag([cls, text]: str2) {
  * {% p class content %}
  */
 export function pTag([cls, text]: str2) {
-  _span = true;
   return htmlTag('p', {class: cls}, text, false);
 }
 
@@ -167,7 +136,6 @@ export function pTag([cls, text]: str2) {
  * {% endfold %}
  */
 export function foldTag([title, open]: str2, content) {
-  _fold = true;
   // @ts-ignore
   return htmlTag('details', { open }, htmlTag('summary', {}, title, false) + hexo.render.renderSync({
     text: content,
@@ -182,7 +150,6 @@ export function foldTag([title, open]: str2, content) {
  * {% audio src %}
  */
 export function audioTag([src]: str) {
-  _media = true;
   return htmlTag('div', {class: 'audio'}, '<audio controls preload>' + htmlTag('source', {
     src,
     type: 'audio/mp3'
@@ -196,7 +163,6 @@ export function audioTag([src]: str) {
  * {% video src %}
  */
 export function videoTag([src]: str) {
-  _media = true;
   return htmlTag('div', {class: 'video'}, '<video controls preload>' + htmlTag('source', {
     src,
     type: 'video/mp4'
@@ -223,7 +189,6 @@ export function videosTag([cls, col]: strnum, content: string) {
  * {% link title subtitle link %}
  */
 export function linkTag([title, subtitle, link]: str3) {
-  _link = true;
   const isLocal = link.startsWith('/');
   const bottom = `
     <div class="tag-link-tips">${isLocal ? '站内链接' : '引用站外链接'}</div>
@@ -250,7 +215,6 @@ export function linkTag([title, subtitle, link]: str3) {
  * {% label text %}
  */
 export function labelTag([text, cls]: str2) {
-  _label = true;
   return htmlTag('span', {class: `hl-label bg-${cls}`}, text, false);
 }
 
@@ -271,7 +235,6 @@ export function imgTag([src, alt, style]: str3) {
  * {% inline_img src alt height %}
  */
 export function inlineImgTag([src, title, height]: str3) {
-  _inline_img = true;
   return htmlTag('img', {src, title, height, class: 'inline-img'});
 }
 
@@ -282,7 +245,6 @@ export function inlineImgTag([src, title, height]: str3) {
  * {% checkbox style checked content %}
  */
 export function checkboxTag([style, checked, content]: str3 | str2) {
-  _check = true;
   if (typeof content === 'undefined') {
     content = checked;
     checked = 'checked';
@@ -301,7 +263,6 @@ export function checkboxTag([style, checked, content]: str3 | str2) {
  * {% radio style checked content %}
  */
 export function radioTag([style, checked, content]: str3 | str2) {
-  _check = true;
   if (typeof content === 'undefined') {
     content = checked;
     checked = 'checked';
@@ -322,7 +283,6 @@ export function radioTag([style, checked, content]: str3 | str2) {
  * {% endnote %}
  */
 export function noteTag([cls, icon]: str2 | string, content: string) {
-  _note = true;
   if (typeof icon === 'undefined') {
     icon = null;
     cls += ' no-icon';
@@ -343,7 +303,6 @@ export function noteTag([cls, icon]: str2 | string, content: string) {
  * {% ebdtimeline %}
  */
 export function timelineTag([title]: str, content: string) {
-  _timeline = true;
   return htmlTag('div', {class: 'timeline'}, htmlTag('span', {class: 'timeline-title'}, title, false) + content, false);
 }
 
@@ -356,7 +315,6 @@ export function timelineTag([title]: str, content: string) {
  * {% endtimenode %}
  */
 export function timenodeTag([time]: str, content: string) {
-  _timeline = true;
   // @ts-ignore
   return htmlTag('div', {class: 'timenode'}, htmlTag('div', {class: 'meta'}, `<p>${time}</p>`, false) + `<div class="body">${hexo.render
     .renderSync({text: content, engine: 'markdown'})
@@ -371,7 +329,6 @@ export function timenodeTag([time]: str, content: string) {
  * {% button 'icon' 'content' 'url' %}
  */
 export function buttonTag([icon, content, url]: str3 | str2) {
-  _button = true;
 
   if (url === undefined) {
     url = content;
@@ -399,7 +356,6 @@ export function buttonTag([icon, content, url]: str3 | str2) {
  * {% github repo %}
  */
 export function githubTag([repo]: str) {
-  _repo = true;
   const id = Math.random().toString(36).substr(2, 9);
   return htmlTag('div', {
     class: 'repo-card'
@@ -435,7 +391,6 @@ export function githubTag([repo]: str) {
  * {% gitlab repo %}
  */
 export function gitlabTag([repo]: str) {
-  _repo = true;
   const id = Math.random().toString(36).substr(2, 9);
   return htmlTag('div', {
     class: 'repo-card'
@@ -471,7 +426,6 @@ export function gitlabTag([repo]: str) {
  * {% gitee repo %}
  */
 export function giteeTag([repo]: str) {
-  _repo = true;
   const id = Math.random().toString(36).substr(2, 9);
   return htmlTag('div', {
     class: 'repo-card'
@@ -507,7 +461,6 @@ export function giteeTag([repo]: str) {
  * {% gitea server repo %}
  */
 export function giteaTag([server, repo]: str2) {
-  _repo = true;
   const id = Math.random().toString(36).substr(2, 9);
   return htmlTag('div', {
     class: 'repo-card'
@@ -543,7 +496,6 @@ export function giteaTag([server, repo]: str2) {
  * {% bubble content notation background-color %}
  */
 export function bubbleTag([content, notation, color]: str3) {
-  _bubble = true;
   if (typeof color === 'undefined')
     color = 'blue';
   if (color.startsWith('#')) {
@@ -569,7 +521,6 @@ export function bubbleTag([content, notation, color]: str3) {
  * {% keyboard key %}
  */
 export function keyboardTag([key]: str) {
-  _keyboard = true
   key = key.toLowerCase()
   switch (key) {
     case "enter":
@@ -602,7 +553,6 @@ export function keyboardTag([key]: str) {
  * {% spoiler style content %}
  */
 export function spoilerTag([style, content]: str2) {
-  _spoiler = true
   // @ts-ignore
   return htmlTag("span", { class: `spoiler ${style}-text` }, content, false)
 }
