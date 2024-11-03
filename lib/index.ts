@@ -1,5 +1,6 @@
 import path from 'node:path';
-import {htmlTag} from 'hexo-util';
+import { htmlTag } from 'hexo-util';
+import stylus from 'stylus'
 
 // @ts-ignore
 hexo.extend.tag.register('youtube', youtubeTag);
@@ -53,11 +54,13 @@ hexo.extend.tag.register('keyboard', keyboardTag);
 hexo.extend.tag.register('spoiler', spoilerTag);
 
 // @ts-ignore
-hexo.extend.filter.register('stylus:renderer', (style: any) => {
-  style
-    .import(path.join(__dirname, 'css', 'index.styl'));
+hexo.extend.filter.register("after_render:css", (css, data) => {
+  if (!data.path.endsWith("source\\css\\index.styl")) return css;
+  const rendered_css = stylus("")
+    .import(path.join(__dirname, "css", "index.styl"))
+    .render();
+  return css.replace('@charset "UTF-8";', `@charset "UTF-8";\n${rendered_css}`);
 });
-
 type str = [string];
 type str2 = [string, string];
 type strbool = [string, boolean];

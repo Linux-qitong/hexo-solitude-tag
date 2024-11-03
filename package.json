@@ -34,6 +34,7 @@
     "@types/chai": "^4.3.17",
     "@types/mocha": "^10.0.7",
     "@types/node": "^18.19.44",
+    "@types/stylus": "^0.48.43",
     "c8": "^8.0.1",
     "chai": "^4.5.0",
     "cheerio": "1.0.0-rc.12",
@@ -49,6 +50,7 @@
     "node": ">=14"
   },
   "dependencies": {
-    "hexo-util": "^3.3.0"
+    "hexo-util": "^3.3.0",
+    "stylus": "^0.64.0"
   }
 }
