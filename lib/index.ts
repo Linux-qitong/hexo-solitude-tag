@@ -1,3 +1,5 @@
+/* eslint linebreak-style: ["error", "windows"] */
+
 import path from 'node:path';
 import { htmlTag } from 'hexo-util';
 import stylus from 'stylus';
@@ -52,6 +54,8 @@ hexo.extend.tag.register('bubble', bubbleTag);
 hexo.extend.tag.register('keyboard', keyboardTag);
 // @ts-ignore
 hexo.extend.tag.register('spoiler', spoilerTag);
+// @ts-ignore
+hexo.extend.tag.register('card', cardTag);
 
 // @ts-ignore
 hexo.extend.filter.register('after_render:css', (css, data) => {
@@ -67,6 +71,7 @@ type strbool = [string, boolean];
 type str2bool = [string, string, boolean];
 type strnum = [string, number];
 type str3 = [string, string, string];
+type str9 = [string, string, string, string, string, string, string, string, string];
 
 /**
  * Bilibili video tag
@@ -338,11 +343,14 @@ export function buttonTag([icon, content, url]: str3 | str2) {
     content = null;
   }
 
-  const onclickAction = url.startsWith('/')
-    ? `pjax.loadUrl('${url}')`
-    : url.startsWith('onclick:')
-      ? url.substring(8)
-      : `window.open('${url}')`;
+  let onclickAction;
+  if (url.startsWith('/')) {
+    onclickAction = `pjax.loadUrl('${url}')`;
+  } else if (url.startsWith('onclick:')) {
+    onclickAction = url.substring(8);
+  } else {
+    onclickAction = `window.open('${url}')`;
+  }
 
   const contentHtml = content ? htmlTag('span', {}, content, false) : '';
 
@@ -504,7 +512,7 @@ export function bubbleTag([content, notation, color]: str3) {
     const r = parseInt(color.slice(1, 3), 16) / 255;
     const g = parseInt(color.slice(3, 5), 16) / 255;
     const b = parseInt(color.slice(5, 7), 16) / 255;
-    const brightness = 0.5474 * Math.sqrt((r ** 2) + (1.5 * g) ** 2 + (0.6 * b) ** 2); // 亮度计算近似公式
+    const brightness = 0.5474 * Math.sqrt((r ** 2) + ((1.5 * g) ** 2) + ((0.6 * b) ** 2)); // 亮度计算近似公式
     return htmlTag('span', { class: 'bubble-content' }, content, false) + htmlTag('span', { class: 'bubble-notation' },
       htmlTag('span', {
         class: 'bubble-item',
@@ -535,6 +543,7 @@ export function keyboardTag([key]: str) {
     case 'window':
     case 'win':
       key = 'win';
+      // fallthrough
     case 'command':
       key += '⌘';
       break;
@@ -559,3 +568,39 @@ export function spoilerTag([style, content]: str2) {
   return htmlTag('span', { class: `spoiler ${style}-text` }, content, false);
 }
 
+/**
+ * Card tag
+ *
+ * Syntax:
+ * {% card name,url,bg,star,text,icon,tag,w,h %}
+ */
+export function cardTag(args: str9): string {
+
+  // 分数转成星星
+  function toStar(num: number): string {
+    const fullStars = Math.floor(num);
+    const halfStar = num - fullStars !== 0 ? '<i class="fa-solid fa-star-half-alt"></i>' : '';
+    const emptyStars = 5 - Math.ceil(num);
+    return '<i class="fa-solid fa-star"></i>'.repeat(fullStars) + halfStar + '<i class="fa-regular fa-star"></i>'.repeat(emptyStars);
+  }
+
+  const [name = '未知', url = '', bg = '', star = '0', text = '此作品博主暂未作出评价', icon = '', tag = '', w = '200px', h = '275px'] = args.join(' ').split(',').map(arg => arg.trim());
+  const backgroundStyle = bg ? `background-image: url(${bg});` : 'background-color: #333;';
+  const starHtml = toStar(Number(star));
+
+  return htmlTag('div', {
+    title: name,
+    referrerPolicy: 'no-referrer',
+    class: 'card_box',
+    style: `${backgroundStyle} width:${w}; height:${h};`
+  },
+  htmlTag('div', { class: 'card_mask' },
+    htmlTag('span', {}, text, false)
+    + (url ? htmlTag('a', { href: url }, '查看详情', false) : ''), false)
+  + htmlTag('div', { class: 'card_top' },
+    htmlTag('i', { class: icon }, '', false)
+    + htmlTag('span', {}, tag, false), false)
+  + htmlTag('div', { class: 'card_content' },
+    htmlTag('span', {}, name, false)
+    + htmlTag('div', {}, starHtml, false), false), false);
+}
