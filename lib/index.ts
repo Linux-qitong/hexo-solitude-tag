@@ -59,7 +59,7 @@ hexo.extend.tag.register('card', cardTag);
 
 // @ts-ignore
 hexo.extend.filter.register('after_render:css', (css, data) => {
-  if (!data.path.endsWith('source\\css\\index.styl')) return css;
+  if (!data.path.endsWith(path.join('source', 'css', 'index.styl'))) return css;
   const rendered_css = stylus('')
     .import(path.join(__dirname, 'css', 'index.styl'))
     .render();
